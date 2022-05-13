@@ -1,0 +1,8 @@
+[submodule "Jordaniakondzo.github.io"]
+	path = Jordaniakondzo.github.io
+	url = git@github.com:Jordaniakondzo/Jordaniakondzo.github.io.git
+	branch = main
+[submodule "public"]
+	path = public
+	url = git@github.com:Jordaniakondzo/Jordaniakondzo.github.io.git
+	branch = main
