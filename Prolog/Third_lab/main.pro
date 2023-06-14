@@ -1,4 +1,7 @@
-﻿% Copyright
+﻿%Имя: Акондзо Жордани Лади Гаэл
+%Группа: НКНбд01-21
+%Студ. билет: 1032215649
+% Copyright
 
 implement main
     open core, stdio, file
@@ -13,6 +16,27 @@ class facts - componentsDB
     slots : (integer Component, string Slot) nondeterm.
     product : (integer Component, real Price) nondeterm.
     member : (integer Component, integer* ComponentList) nondeterm.
+
+class predicates
+    length : (A*) -> integer N.
+    sum_elem : (real* List) -> real Sum.
+    min_elem : (real* List) -> real Min.
+    max_elem : (real* List) -> real Max.
+
+clauses
+    length([]) = 0.
+    length([_ | T]) = length(T) + 1.
+
+    sum_elem([]) = 0.
+    sum_elem([H | T]) = sum_elem(T) + H.
+
+    min_elem([H | T]) = Min :-
+        Min = math::min(H, min_elem(T)).
+    min_elem([H]) = H.
+
+    max_elem([H | T]) = Max :-
+        Max = math::max(H, max_elem(T)).
+    max_elem([H]) = H.
 
 class predicates
     availableComponents : (componentType Type) nondeterm.
@@ -30,46 +54,47 @@ clauses
                 member(Component, ComponentList),
                 product(Component, Price)
             ],
-        TotalCost = sum(Prices).
+        TotalCost = sum_elem(Prices).
 
 class predicates
-    sum : (real* Numbers) -> real Sum.
+    numberOfComponents : (componentType Type) -> integer Count.
 clauses
-    sum([]) = 0.
-    sum([Head | Tail]) = Sum :-
-        Sum = Head + sum(Tail).
+    numberOfComponents(Type) = Count :-
+        Components = [ Comp || component(Comp, _, Type, _, _) ],
+        Count = length(Components).
 
 class predicates
-    minMaxAvg : (real* Numbers, real Min, real Max, real Avg).
+    averagePrice : (componentType Type) -> real AvgPrice.
 clauses
-    minMaxAvg(Numbers, Min, Max, Avg) :-
-        Min = min(Numbers),
-        Max = max(Numbers),
-        Avg = sum(Numbers) / list::length(Numbers).
+    averagePrice(Type) = AvgPrice :-
+        Prices =
+            [ Price ||
+                component(Identifier, _, Type, _, _),
+                product(Identifier, Price)
+            ],
+        TotalPrice = sum_elem(Prices),
+        Count = length(Prices),
+        AvgPrice = TotalPrice / Count.
 
 class predicates
-    min : (real* Numbers) -> real Min.
-clauses
-    min([Head | Tail]) = Min :-
-        Min = list::foldl(min_, Tail, Head).
+    minPrice : (componentType Type) -> real MinPrice.
+    maxPrice : (componentType Type) -> real MaxPrice.
 
-class predicates
-    max : (real* Numbers) -> real Max.
 clauses
-    max([Head | Tail]) = Max :-
-        Max = list::foldl(max_, Tail, Head).
-
-class predicates
-    min_ : (real A, real B) -> real Min.
-clauses
-    min_(A, B) = Min :-
-        Min = if A < B then A else B end if.
-
-class predicates
-    max_ : (real A, real B) -> real Max.
-clauses
-    max_(A, B) = Max :-
-        Max = if A > B then A else B end if.
+    minPrice(Type) = MinPrice :-
+        Prices =
+            [ Price ||
+                component(Identifier, _, Type, _, _),
+                product(Identifier, Price)
+            ],
+        MinPrice = min_elem(Prices).
+    maxPrice(Type) = MaxPrice :-
+        Prices =
+            [ Price ||
+                component(Identifier, _, Type, _, _),
+                product(Identifier, Price)
+            ],
+        MaxPrice = max_elem(Prices).
 
 clauses
     run() :-
@@ -87,49 +112,27 @@ clauses
     run() :-
         ComponentList = [1, 2, 3, 4, 5, 6],
         TotalCost = totalCostOfPC(ComponentList),
-        writef("The cost of the finished PC is: %.2f\n", TotalCost),
+        writef("The total cost of the finished PC is: %.2f\n", TotalCost),
         fail.
 
     run() :-
-        Prices = [ Price || product(_, Price) ],
-        minMaxAvg(Prices, Min, Max, Avg),
-        writef("Minimum price: %.2f\n", Min),
-        writef("Maximum price: %.2f\n", Max),
-        writef("Average price: %.2f\n", Avg),
+        CPUCount = numberOfComponents(cpu),
+        writef("Number of CPUs: %\n", CPUCount),
         fail.
 
     run() :-
-        write("The components are: \n"),
+        MinPrice = minPrice(cpu),
+        writef("CPU Min Price: %.2f\n", MinPrice),
         fail.
 
     run() :-
-        member(1, [1, 2, 3, 4, 5, 6]),
-        write("Component 1: Intel Core i7-9700K\n"),
+        MaxPrice = maxPrice(cpu),
+        writef("CPU Max Price: %.2f\n", MaxPrice),
         fail.
 
     run() :-
-        member(2, [1, 2, 3, 4, 5, 6]),
-        write("Component 2: NVIDIA GeForce RTX 3080\n"),
-        fail.
-
-    run() :-
-        member(3, [1, 2, 3, 4, 5, 6]),
-        write("Component 3: Corsair Vengeance LPX16GB\n"),
-        fail.
-
-    run() :-
-        member(4, [1, 2, 3, 4, 5, 6]),
-        write("Component 4: ASUS ROG Strix Z390-E\n"),
-        fail.
-
-    run() :-
-        member(5, [1, 2, 3, 4, 5, 6]),
-        write("Component 5: Samsung 970 EVO 1TB\n"),
-        fail.
-
-    run() :-
-        member(6, [1, 2, 3, 4, 5, 6]),
-        write("Component 6: Corsair RM850x\n"),
+        CPUAvgPrice = averagePrice(cpu),
+        writef("CPU Average Price: %.2f\n", CPUAvgPrice),
         fail.
 
     run().

@@ -1,4 +1,7 @@
-﻿% Copyright
+﻿%Имя: Акондзо Жордани Лади Гаэл
+%Группа: НКНбд01-21
+%Студ. билет: 1032215649
+% Copyright
 
 implement main
     open core, stdio, file
