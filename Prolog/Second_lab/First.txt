@@ -1,0 +1,44 @@
+﻿
+% Facts about components
+
+component(1, "Intel Core i7-9700K", cpu, intel, "2019-10-01").
+component(2, "NVIDIA GeForce RTX 3080", gpu, nvidia, "2020-09-17").
+component(3, "Corsair Vengeance LPX 16GB", ram, corsair, "2015-08-10").
+component(4, "ASUS ROG Strix Z390-E", motherboard, asus, "2018-10-08").
+component(5, "Samsung 970 EVO 1TB", storage, samsung, "2018-04-24").
+component(6, "Corsair RM850x", powerSupply, corsair, "2018-04-17").
+
+
+% Facts about connection interfaces
+
+connectionInterface(1, "LGA 1151").
+connectionInterface(2, "PCIe 4.0 x16").
+connectionInterface(3, "DDR4").
+connectionInterface(4, "LGA 1151").
+connectionInterface(4, "PCIe 3.0 x16").
+connectionInterface(4, "DDR4").
+connectionInterface(5, "M.2 NVMe").
+connectionInterface(6, "ATX12V").
+
+% Facts about slots
+
+slots(4, "PCIe 3.0 x16").
+slots(4, "PCIe 3.0 x1").
+slots(4, "M.2 NVMe").
+slots(4, "SATA 6Gb/s").
+
+% Facts about products
+
+product(1, 350.00).
+product(2, 1200.00).
+product(3, 80.00).
+product(4, 250.00).
+product(5, 150.00).
+product(6, 140.00).
+
+member(1, [1, 2, 3, 4, 5, 6]).
+member(2, [1, 2, 3, 4, 5, 6]).
+member(3, [1, 2, 3, 4, 5, 6]).
+member(4, [1, 2, 3, 4, 5, 6]).
+member(5, [1, 2, 3, 4, 5, 6]).
+member(6, [1, 2, 3, 4, 5, 6]).
